@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Module isbn</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module isbn</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>ISBN utilities for Erlang including ISBN-10 and ISBN-13 check digit
+  generators and validators.
+<p>Copyright © 2007 Matt Croydon</p>
+
+<p><b>Version:</b> 0.0.5</p>
+<p><b>Authors:</b> Matt Croydon (<a href="mailto:matt@ooiio.com"><tt>matt@ooiio.com</tt></a>) [<em>web site:</em> <tt><a href="http://postneo.com" target="_top">http://postneo.com</a></tt>].</p>
+
+<h2><a name="description">Description</a></h2>ISBN utilities for Erlang including ISBN-10 and ISBN-13 check digit
+  generators and validators.  Also included is a  ISBN-10 to
+  ISBN-13 conversion, and ISBN-13 to ISBN-10 when applicable.
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#check_digit_10-1">check_digit_10/1</a></td><td>Given a 9 digit list, calculates the ISBN-10 check digit and returns it.</td></tr>
+<tr><td valign="top"><a href="#check_digit_13-1">check_digit_13/1</a></td><td>Given a 12 digit list, calculates the ISBN-13 check digit and
+  returns it.</td></tr>
+<tr><td valign="top"><a href="#convert_10_to_13-1">convert_10_to_13/1</a></td><td>Given an ISBN-10, converts it to ISBN-13, checks validity, and
+  returns the ISBN-13 or throws an error.</td></tr>
+<tr><td valign="top"><a href="#convert_13_to_10-1">convert_13_to_10/1</a></td><td>Given an ISBN-13, returns the correct ISBN-10 by  
+dropping the first three digits and check digit then  
+recalculating the new ISBN-10 check digit.</td></tr>
+<tr><td valign="top"><a href="#validate_10-1">validate_10/1</a></td><td>Given a 10 digit ISBN, generates check digit and checks to see
+  that is matches the last integer passed in.</td></tr>
+<tr><td valign="top"><a href="#validate_13-1">validate_13/1</a></td><td>Given a 13 digit ISBN as a list of integers, generates the check
+  digit and returns true if it matches the check digit passed in,
+  false otherwise.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="check_digit_10-1">check_digit_10/1</a></h3>
+<div class="spec">
+<p><tt>check_digit_10(Isbn::List) -&gt; integer()</tt></p>
+</div><p>throws <tt>atom()</tt></p>
+<p>Given a 9 digit list, calculates the ISBN-10 check digit and returns it.</p>
+
+<h3 class="function"><a name="check_digit_13-1">check_digit_13/1</a></h3>
+<div class="spec">
+<p><tt>check_digit_13(Isbn::List) -&gt; integer()</tt></p>
+</div><p>throws <tt>atom()</tt></p>
+<p>Given a 12 digit list, calculates the ISBN-13 check digit and
+  returns it.</p>
+
+<h3 class="function"><a name="convert_10_to_13-1">convert_10_to_13/1</a></h3>
+<div class="spec">
+<p><tt>convert_10_to_13(Isbn::List) -&gt; List</tt></p>
+</div><p>throws <tt>atom()</tt></p>
+<p>Given an ISBN-10, converts it to ISBN-13, checks validity, and
+  returns the ISBN-13 or throws an error.</p>
+
+<h3 class="function"><a name="convert_13_to_10-1">convert_13_to_10/1</a></h3>
+<div class="spec">
+<p><tt>convert_13_to_10(Isbn::List) -&gt; List</tt></p>
+</div><p>throws <tt>atom()</tt></p>
+<p><p>Given an ISBN-13, returns the correct ISBN-10 by  
+dropping the first three digits and check digit then  
+recalculating the new ISBN-10 check digit.</p>
+ 
+  If the given ISBN-13 does not begin with [9,7,8],
+  an error is thrown because only 978- ISBN-13's can
+  be translated in to ISBN-10.</p>
+
+<h3 class="function"><a name="validate_10-1">validate_10/1</a></h3>
+<div class="spec">
+<p><tt>validate_10(Isbn::List) -&gt; <a href="#type-boolean">boolean()</a></tt></p>
+</div><p>throws <tt>atom()</tt></p>
+<p>Given a 10 digit ISBN, generates check digit and checks to see
+  that is matches the last integer passed in.  Returns true or
+  false, depending on if they match or not.</p>
+
+<h3 class="function"><a name="validate_13-1">validate_13/1</a></h3>
+<div class="spec">
+<p><tt>validate_13(Isbn::List) -&gt; <a href="#type-boolean">boolean()</a></tt></p>
+</div><p>throws <tt>atom()</tt></p>
+<p>Given a 13 digit ISBN as a list of integers, generates the check
+  digit and returns true if it matches the check digit passed in,
+  false otherwise.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, May 2 2007, 23:13:48.</i></p>
+</body>
+</html>
