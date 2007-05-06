@@ -53,7 +53,7 @@ check_digit_10_string([], IsbnList) ->
 %% @doc Given a 10 digit ISBN, generates check digit and checks to see
 %% that is matches the last integer passed in.  Returns true or
 %% false, depending on if they match or not. 
-%% @spec validate_10(List) -> boolean()
+%% @spec validate_10(List) -> bool()
 %% @throws atom()
 validate_10(Isbn) when length(Isbn) /= 10 ->
     throw(wrongLength);
@@ -67,7 +67,7 @@ validate_10(Isbn) ->
 %% @doc Given an ISBN string containing 10 characters and optionally "-" characters,
 %% generate a list, chomping "-" characters, and then pass the results to
 %% validate_10/1.
-%% @spec validate_10_string(string()) -> boolean()
+%% @spec validate_10_string(string()) -> bool()
 %% @throws atom()
 validate_10_string(Isbn) ->
     validate_10_string(Isbn, []).
@@ -128,7 +128,7 @@ check_digit_13_string([], IsbnList) ->
 %% @doc Given a 13 digit ISBN as a list of integers, generates the check
 %% digit and returns true if it matches the check digit passed in,
 %% false otherwise.
-%% @spec validate_13(List) -> boolean()
+%% @spec validate_13(List) -> bool()
 %% @throws atom()
 validate_13(Isbn) when length(Isbn) /= 13 ->
     throw(wrongLength);
@@ -144,7 +144,7 @@ validate_13(Isbn) ->
 %% @doc Given an ISBN in string form, 13 characters total with optional "-"
 %% seperators, chomp "-" characters, convert them to a list and pass them
 %% on to validate_13/1.
-%% @spec validate_13_string(string()) -> boolean()
+%% @spec validate_13_string(string()) -> bool()
 %% @throws atom()
 validate_13_string(Isbn) ->
     validate_13_string(Isbn, []).
