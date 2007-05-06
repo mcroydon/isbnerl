@@ -179,8 +179,9 @@ convert_10_to_13(Isbn) ->
 
 %% @doc Given an ISBN-10 in string form, convert to a list,
 %% removing any "-" characters, and then pass it on to
-%% convert_10_to_13/1.
-%% @spec convert_10_to_13_string(string()) -> List
+%% convert_10_to_13/1, converting it back to a string when
+%% it is done.
+%% @spec convert_10_to_13_string(string()) -> string()
 %% @throws atom()
 %% @todo Should I be returning a string or letting the user
 %% do that if they choose?
@@ -196,7 +197,7 @@ convert_10_to_13_string([H|T], IsbnList) ->
     end;
 
 convert_10_to_13_string([], IsbnList) ->
-    convert_10_to_13(IsbnList).
+    lists:concat(convert_10_to_13(IsbnList)).
 
 %% @doc Given an ISBN-13, returns the correct ISBN-10 by
 %% dropping the first three digits and check digit then
@@ -226,8 +227,9 @@ do_convert_13_to_10(Isbn) ->
     FinalIsbn.
 
 %% @doc Given an ISBN-13 in string form, convert it to a
-%% list and sent it to convert_13_to_10/1.
-%% @spec convert_13_to_10_string(string()) -> List
+%% list and sent it to convert_13_to_10/1, converting it
+%% back to a string when it's done.
+%% @spec convert_13_to_10_string(string()) -> string()
 %% @throws atom()
 convert_13_to_10_string(Isbn) ->
     convert_13_to_10_string(Isbn, []).
@@ -240,4 +242,4 @@ convert_13_to_10_string([H|T], IsbnList) ->
     end;
 
 convert_13_to_10_string([], IsbnList) ->
-    convert_13_to_10(IsbnList).
+    lists:concat(convert_13_to_10(IsbnList)).
