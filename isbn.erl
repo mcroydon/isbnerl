@@ -1,12 +1,17 @@
 %% @author Matt Croydon <matt@ooiio.com> [http://postneo.com]
 %% @copyright 2007 Matt Croydon
-%% @version 0.0.5
+%% @version 0.1.0
 %% @doc ISBN utilities for Erlang including ISBN-10 and ISBN-13 check digit
 %% generators and validators.  Also included is a  ISBN-10 to
 %% ISBN-13 conversion, and ISBN-13 to ISBN-10 when applicable.
 
 -module(isbn).
--export([check_digit_10/1, validate_10/1, check_digit_13/1, validate_13/1, convert_10_to_13/1, convert_13_to_10/1]).
+% ISBN-10 exports
+-export([check_digit_10/1, check_digit_10_string/1, validate_10/1, validate_10_string/1]).
+% ISBN-13 exports
+-export([check_digit_13/1, check_digit_13_string/1, validate_13/1, validate_13_string/1]).
+% Conversion exports
+-export([convert_10_to_13/1, convert_10_to_13_string/1, convert_13_to_10/1, convert_13_to_10_string/1]).
 
 %% @doc Given a 9 digit list, calculates the ISBN-10 check digit and returns it.
 %% @spec check_digit_10(List) -> integer()
@@ -26,6 +31,25 @@ check_digit_10([], Total) when 11 - (Total rem 11) =:= 10 ->
 check_digit_10([], Total) ->
     11 - (Total rem 11).
 
+%% @doc Given an ISBN string containing 9 characters and optionally "-" characters,
+%% generate a list, chomping "-" characters, and then pass the results to
+%% check_digit_10/1.
+%% @spec check_digit_10_string(string()) -> integer() | string()
+
+check_digit_10_string(Isbn) ->
+    check_digit_10_string(Isbn, []).
+
+check_digit_10_string([H|T], IsbnList) ->
+    % Don't pass on "-" characters
+    case H /= 45 of
+	false -> check_digit_10_string(T, IsbnList);
+	true -> {DigitInt, _} = string:to_integer([H]),
+		 check_digit_10_string(T, lists:append([IsbnList, [DigitInt]]))
+    end;
+
+check_digit_10_string([], IsbnList) ->
+    check_digit_10(IsbnList).
+
 %% @doc Given a 10 digit ISBN, generates check digit and checks to see
 %% that is matches the last integer passed in.  Returns true or
 %% false, depending on if they match or not. 
@@ -37,10 +61,28 @@ validate_10(Isbn) when length(Isbn) /= 10 ->
 validate_10(Isbn) ->
     {MainList, CheckDigitList} = lists:split(9, Isbn),
     GivenCheckDigit = hd(CheckDigitList),
-    case check_digit_10(MainList) of
-	GivenCheckDigit -> true;
-	_ -> false
-    end.
+    CalculatedCheckDigit = check_digit_10(MainList),
+    GivenCheckDigit =:= CalculatedCheckDigit.
+
+%% @doc Given an ISBN string containing 10 characters and optionally "-" characters,
+%% generate a list, chomping "-" characters, and then pass the results to
+%% validate_10/1.
+%% @spec validate_10_string(string()) -> boolean()
+%% @throws atom()
+validate_10_string(Isbn) ->
+    validate_10_string(Isbn, []).
+
+validate_10_string([H|T], IsbnList) ->
+    case H of
+	45 -> validate_10_string(T, IsbnList);
+	88 -> validate_10_string(T, lists:append([IsbnList, ['X']]));
+	_ -> {DigitInt, _} = string:to_integer([H]),
+	     validate_10_string(T, lists:append([IsbnList, [DigitInt]]))
+    end;
+
+validate_10_string([], IsbnList) ->
+    validate_10(IsbnList).
+
 
 %% @doc Given a 12 digit list, calculates the ISBN-13 check digit and 
 %% returns it.
@@ -67,6 +109,22 @@ check_digit_13([], OddTotal, EvenTotal, _Count) ->
 	_ -> Result
     end.
 
+%% @doc Given 12 out of 13 characters of an ISBN as a string, chomp "-"
+%% characters and pass the result on to check_digit_13/1.
+%% @spec check_digit_13_string(string()) -> integer() | boolean()
+check_digit_13_string(Isbn) ->
+    check_digit_13_string(Isbn, []).
+
+check_digit_13_string([H|T], IsbnList) ->				       
+    case H /= 45 of
+        false -> check_digit_13_string(T, IsbnList);
+	true -> {DigitInt, _} = string:to_integer([H]),
+                check_digit_13_string(T, lists:append([IsbnList, [DigitInt]]))
+    end;
+
+check_digit_13_string([], IsbnList) ->
+    check_digit_13(IsbnList).
+
 %% @doc Given a 13 digit ISBN as a list of integers, generates the check
 %% digit and returns true if it matches the check digit passed in,
 %% false otherwise.
@@ -82,6 +140,24 @@ validate_13(Isbn) ->
         GivenCheckDigit -> true;
         _ -> false
     end.
+
+%% @doc Given an ISBN in string form, 13 characters total with optional "-"
+%% seperators, chomp "-" characters, convert them to a list and pass them
+%% on to validate_13/1.
+%% @spec validate_13_string(string()) -> boolean()
+%% @throws atom()
+validate_13_string(Isbn) ->
+    validate_13_string(Isbn, []).
+
+validate_13_string([H|T], IsbnList) ->
+    case H/= 45 of
+	false -> validate_13_string(T, IsbnList);
+	true -> {DigitInt, _} = string:to_integer([H]),
+		validate_13_string(T, lists:append([IsbnList, [DigitInt]]))
+    end;
+
+validate_13_string([], IsbnList) ->
+    validate_13(IsbnList).
 
 %% @doc Given an ISBN-10, converts it to ISBN-13, checks validity, and
 %% returns the ISBN-13 or throws an error.
@@ -100,6 +176,27 @@ convert_10_to_13(Isbn) ->
 	false -> throw(invalidIsbn13);
 	true  -> Isbn13
     end.
+
+%% @doc Given an ISBN-10 in string form, convert to a list,
+%% removing any "-" characters, and then pass it on to
+%% convert_10_to_13/1.
+%% @spec convert_10_to_13_string(string()) -> List
+%% @throws atom()
+%% @todo Should I be returning a string or letting the user
+%% do that if they choose?
+convert_10_to_13_string(Isbn) ->
+    convert_10_to_13_string(Isbn, []).
+
+convert_10_to_13_string([H|T], IsbnList) ->
+    case H/= 45 of
+	45 -> convert_10_to_13_string(T, IsbnList);
+	88 -> convert_10_to_13_string(T, lists:append([IsbnList, ['X']]));
+	_ -> {DigitInt, _} = string:to_integer([H]),
+             convert_10_to_13_string(T, lists:append([IsbnList, [DigitInt]]))
+    end;
+
+convert_10_to_13_string([], IsbnList) ->
+    convert_10_to_13(IsbnList).
 
 %% @doc Given an ISBN-13, returns the correct ISBN-10 by
 %% dropping the first three digits and check digit then
@@ -127,3 +224,20 @@ do_convert_13_to_10(Isbn) ->
     CheckDigit = check_digit_10(Isbn9),
     FinalIsbn = lists:append(Isbn9, [CheckDigit]),
     FinalIsbn.
+
+%% @doc Given an ISBN-13 in string form, convert it to a
+%% list and sent it to convert_13_to_10/1.
+%% @spec convert_13_to_10_string(string()) -> List
+%% @throws atom()
+convert_13_to_10_string(Isbn) ->
+    convert_13_to_10_string(Isbn, []).
+
+convert_13_to_10_string([H|T], IsbnList) ->
+    case H/= 45 of
+        false -> convert_13_to_10_string(T, IsbnList);
+	true -> {DigitInt, _} = string:to_integer([H]),
+                convert_13_to_10_string(T, lists:append([IsbnList, [DigitInt]]))
+    end;
+
+convert_13_to_10_string([], IsbnList) ->
+    convert_13_to_10(IsbnList).
