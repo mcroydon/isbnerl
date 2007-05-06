@@ -111,7 +111,7 @@ check_digit_13([], OddTotal, EvenTotal, _Count) ->
 
 %% @doc Given 12 out of 13 characters of an ISBN as a string, chomp "-"
 %% characters and pass the result on to check_digit_13/1.
-%% @spec check_digit_13_string(string()) -> integer() | boolean()
+%% @spec check_digit_13_string(string()) -> integer()
 check_digit_13_string(Isbn) ->
     check_digit_13_string(Isbn, []).
 
