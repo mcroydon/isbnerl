@@ -1,10 +1,12 @@
 %% @author Matt Croydon <matt@ooiio.com> [http://postneo.com]
 %% @copyright 2007 Matt Croydon
-%% @version 0.1.0
+%% @version 0.1.5
 %% @doc ISBN utilities for Erlang including ISBN-10 and ISBN-13 check digit
 %% generators and validators.  Also included is a  ISBN-10 to
 %% ISBN-13 conversion, and ISBN-13 to ISBN-10 when applicable.
-
+%%
+%% A full test suite accompanies this module in the file
+%% isbn_test.erl
 -module(isbn).
 % ISBN-10 exports
 -export([check_digit_10/1, check_digit_10_string/1, validate_10/1, validate_10_string/1]).
