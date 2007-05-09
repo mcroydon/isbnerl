@@ -1,4 +1,5 @@
 %% Test suite for isbn.erl
+%% Requires EUnit 2.0 (http://svn.process-one.net/contribs/trunk/eunit)
 -module(isbn_test).
 -include_lib("eunit/include/eunit.hrl").
 -import(isbn, [check_digit_10/1, check_digit_10_string/1, validate_10/1, validate_10_string/1]).
